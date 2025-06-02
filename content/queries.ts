@@ -1,4 +1,5 @@
-import { HeroQuery, LogoWallQuery } from '@/types'
+import 'server-only'
+import { HeroQuery, LogoWallQuery, NavigationQuery } from '@/types'
 import { contentGqlFetcher } from './fetch'
 
 export const getContentForHero = async () => {
@@ -46,6 +47,36 @@ export const getContentForLogoWall = async () => {
     variables: {
       where: {
         title_contains: 'client',
+      },
+    },
+  })
+
+  if (!data) throw Error('oops')
+  return data
+}
+
+export const getContentForNavigation = async () => {
+  const query = /* GraphQL */ `
+    query NavigationCollection($where: NavigationFilter) {
+      navigationCollection(where: $where) {
+        items {
+          name
+          linksCollection {
+            items {
+              label
+              link
+            }
+          }
+        }
+      }
+    }
+  `
+
+  const data = await contentGqlFetcher<NavigationQuery>({
+    query,
+    variables: {
+      where: {
+        name: 'Header',
       },
     },
   })

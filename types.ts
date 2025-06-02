@@ -24,3 +24,17 @@ export type LogoWallQuery = {
     }[]
   }
 }
+
+export type NavigationQuery = {
+  navigationCollection: {
+    items: {
+      name: string
+      linksCollection: {
+        items: {
+          label: string
+          link: string
+        }[]
+      }
+    }[]
+  }
+}
