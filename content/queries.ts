@@ -1,5 +1,5 @@
 import 'server-only'
-import { HeroQuery, LogoWallQuery, NavigationQuery } from '@/types'
+import { CustomerPostQuery, CustomerPostsSlugsQuery, HeroQuery, LogoWallQuery, NavigationQuery } from '@/types'
 import { contentGqlFetcher } from './fetch'
 
 export const getContentForHero = async () => {
@@ -79,6 +79,61 @@ export const getContentForNavigation = async () => {
         name: 'Header',
       },
     },
+  })
+
+  if (!data) throw Error('oops')
+  return data
+}
+
+export const getContentForCustomerPost = async (slug: string) => {
+  const query = /* GraphQL */ `
+    query CustomerPostCollection($where: CustomerPostFilter) {
+      customerPostCollection(where: $where) {
+        items {
+          body {
+            json
+          }
+          slug
+          customer {
+            logo {
+              url
+              width
+              height
+            }
+            name
+          }
+          title
+        }
+      }
+    }
+  `
+
+  const data = await contentGqlFetcher<CustomerPostQuery>({
+    query,
+    variables: {
+      where: {
+        slug,
+      },
+    },
+  })
+
+  if (!data) throw Error('oops')
+  return data
+}
+
+export const getSlugsOfCustomerPosts = async () => {
+  const query = /* GraphQL */ `
+    query Items {
+      customerPostCollection {
+        items {
+          slug
+        }
+      }
+    }
+  `
+
+  const data = await contentGqlFetcher<CustomerPostsSlugsQuery>({
+    query,
   })
 
   if (!data) throw Error('oops')

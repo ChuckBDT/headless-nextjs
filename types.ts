@@ -38,3 +38,31 @@ export type NavigationQuery = {
     }[]
   }
 }
+
+export type CustomerPostQuery = {
+  customerPostCollection: {
+    items: {
+      body: {
+        json: JSON
+      }
+      slug: string
+      customer: {
+        logo: {
+          url: string
+          width: number
+          height: number
+        }
+        name: string
+      }
+      title: string
+    }[]
+  }
+}
+
+export type CustomerPostsSlugsQuery = {
+  customerPostCollection: {
+    items: {
+      slug: string
+    }[]
+  }
+}
